@@ -1,3 +1,5 @@
+const Secrets = require( './secrets' );
+
 const config = {
   production: {
     SECRET: process.env.SECRET,
@@ -6,6 +8,8 @@ const config = {
   default: {
     SECRET: '123456',
     DATABASE: 'mongodb://localhost:27017/tarontsi',
+    SMTPuser: Secrets.SMTPuser,
+    SMTPpass: Secrets.SMTPpass,
   }
 }
 

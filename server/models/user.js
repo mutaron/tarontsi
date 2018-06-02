@@ -3,6 +3,7 @@ const bcrypt = require( 'bcrypt' );
 const jwt = require( 'jsonwebtoken' );
 const SALT_I = 10;
 const config = require( './../config/config' ).get( process.env.NODE_ENV );
+const nodemailer = require( 'nodemailer' );
 
 const userSchema = mongoose.Schema( {
   email: {
@@ -36,6 +37,9 @@ const userSchema = mongoose.Schema( {
     type: Boolean,
     default: false
   },
+  confirmtoken: {
+    type: String
+  },
   token: {
     type: String
   }
@@ -54,6 +58,40 @@ userSchema.pre( 'save', function ( next ) {
       } )
 
     } )
+  }
+  else {
+    next();
+  }
+} );
+
+userSchema.pre( 'save', function ( next ) {
+  var user = this;
+  let transporter = nodemailer.createTransport( {
+    service: 'gmail',
+    secure: false,    
+    auth: {
+      user: config.SMTPuser,
+      pass: config.SMTPpass
+    }
+  } );
+  if ( user.isModified( 'email' ) ) {
+    user.confirmtoken = jwt.sign( user._id.toHexString(), config.SECRET );
+
+    var mailOptions = {
+      from: 'info@tarontsi.com', // sender address
+      to: user.email, // This can also contain an array of emails
+      subject: 'Thanks for registering with tarontsi.com',
+      // text: 'Hello world ?', // plaintext body
+      html: "<b>Please click this url</b> http://localhost:3000/user/confirmregister?id=" + user.confirmtoken + "<br/><b>to finish your registration</b>"
+
+    };
+    
+    transporter.sendMail( mailOptions, ( error, info ) => {
+      if ( error ) {
+        return console.log( error );
+      }
+      next();
+    } );
   }
   else {
     next();
