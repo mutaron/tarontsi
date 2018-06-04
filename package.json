@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/server.js",
-    "server": "nodemon server/server.js"
+    "server": "nodemon server/server.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "engines": {
     "node": "9.7.1"
@@ -16,6 +18,7 @@
   "dependencies": {
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
+    "concurrently": "^3.5.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.2",
