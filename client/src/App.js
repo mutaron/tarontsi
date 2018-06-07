@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import Layout from './hoc/Layout/Layout';
+
 
 class App extends Component {
   render () {
     let routes = (
       <Switch>
-        <Route path="/login" component={ asyncAuth } />
-        <Route path="/about" exact component={ BurgerBuilder } />
+        <Route path="/login"  />
+        <Route path="/about" />
         <Redirect to="/" />
       </Switch>
     );
