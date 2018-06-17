@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
+ /*  import Header from "./components/Layout/Header"; */
 
 
 class App extends Component {
@@ -11,12 +12,12 @@ class App extends Component {
         <Route path="/about" />
         <Redirect to="/" />
       </Switch>
-    );
+    ); 
     return (
       <div>
-        <Layout>
+         <Layout>
           { routes }
-        </Layout>
+        </Layout> 
       </div>
     );
   }

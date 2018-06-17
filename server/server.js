@@ -1,77 +1,52 @@
-const express = require( 'express' );
-const bodyParser = require( "body-parser" );
-const cookieParser = require( "cookie-parser" );
-const mongoose = require( 'mongoose' );
-const config = require( './config/config' ).get( process.env.NODE_ENV );
+const app = require("./backend/app");
+const debug = require("debug")("tarontsi");
+const http = require("http");
 
+const normalizePort = val => {
+  var port = parseInt(val, 10);
 
-const app = express();
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
-mongoose.Promise = global.Promise;
-mongoose.connect( config.DATABASE );
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
-const { User } = require( './models/user' );
+  return false;
+};
 
-app.use( bodyParser.json() );
-app.use( cookieParser() );
+const onError = error => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
 
-//////******  USERS  *******/
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
+  debug("Listening on " + bind);
+};
 
-//////******  GET  *******/
+const port = normalizePort(process.env.PORT || "3001");
+app.set("port", port);
 
-//////******  POST  *******/
-
-app.post( '/api/user/register', ( req, res ) => {
-  const user = new User( req.body );
-  user.save( ( err, doc ) => {
-    if ( err ) return res.json( { success: false } );
-    res.status( 200 ).json( { success: true, user: doc } );
-  } )
-} );
-
-app.post( '/api/user/confirmregisteration', ( req, res ) => {
-  let id = req.query.id;
-
-  User.findOneAndUpdate( { confirmtoken: id }, { $set: { active: true } }, { new: true }, ( err, doc ) => {
-    if ( err ) return res.status( 400 ).send( err );
-    res.status( 200 ).json( { success: true } );
-  } )
-} );
-
-app.post( '/api/login', ( req, res ) => {
-  User.findOne( { 'email': req.body.email }, ( err, user ) => {
-    if ( !user ) return res.json( {
-      isAuth: false,
-      message: 'Email doesnt exist'
-    } );
-    user.comparePassword( req.body.password, ( err, isMatch ) => {
-      if ( !isMatch ) return res.json( {
-        isAuth: false,
-        message: 'Wrong password'
-      } );
-      user.generateToken( ( err, user ) => {
-        if ( err ) return res.status( 400 ).send( err );
-        res.cookie( 'auth', user.token ).json( {
-          isAuth: true,
-          user
-        } );
-
-      } )
-    } )
-  } )
-} )
-
-//////******  UPDATE  *******/
-
-//////******  DELETE  *******/
-
-
-//////****** END USERS  *******/
-
-
-
-
-const port = process.env.PORT || 3001;
-app.listen( port, () => {
-  console.log( 'SERVER RUNNING' )
-} )
+const server = http.createServer(app);
+server.on("error", onError);
+server.on("listening", onListening);
+server.listen(port);
