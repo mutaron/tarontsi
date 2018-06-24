@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './Layout.css';
-import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+//import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import Header from "../../components/Layout/Header";
+import Footer from '../../components/Layout/Footer';
 
 class Layout extends Component {
   state = {
@@ -20,12 +22,11 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        <Toolbar
-          isAuth={ this.props.isAuthenticated }
-          drawerToggleClicked={ this.sideDrawerToggleHandler } />
+        <Header/>
         <main className={ classes.Content }>
           { this.props.children }
         </main>
+        <Footer/>
       </div>
     );
   }

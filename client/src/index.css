@@ -1,8 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Open Sans", sans-serif;
-  background-image: url('./assets/images/logo.jpg');
+  font-family: 'Roboto Slab', serif;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: top center;

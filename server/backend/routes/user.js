@@ -8,7 +8,7 @@ const router = express.Router();
 //////******  POST  *******/
 
 router.post("/register", (req, res) => {
-  User.findOne({ email: req.body.email }, (err, u) => {
+  User.findOne({ 'email': req.body.email }, (err, u) => {
     if (u) return res.json({ status: 404, message: "Email exists." });
     const user = new User(req.body);
     user.save((err, doc) => {
@@ -18,8 +18,9 @@ router.post("/register", (req, res) => {
   });
 });
 
-router.post("/login", (req, res) => {
-  User.findOne({ email: req.body.email }, (err, user) => {
+router.post( "/login", ( req, res ) => {
+  console.log(User);
+  User.findOne({ 'email': req.body.email }, (err, user) => {
     if (!user)
       return res.json({
         isAuth: false,
