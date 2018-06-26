@@ -4,7 +4,7 @@
   border-radius: 50%;
 }
 .TopTitle{
-  padding: 10px;
+  padding: 10px;  
 }
 .Login{
   margin:auto 0 auto auto;
@@ -22,4 +22,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.FooterContainer{
+  position:absolute;
+  bottom:0;
 }

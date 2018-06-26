@@ -50,10 +50,9 @@ class Login extends Component {
   };
   
   submitHandler = event => {
-    console.log(this.props);
     event.preventDefault();
     
-    this.props.onAuth(
+    this.props.onLogin(
       this.state.controls.Email.value,
       this.state.controls.Password.value
     );
@@ -133,10 +132,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onAuth: (email, password) =>
-      dispatch(actions.auth(email, password))
-  };
+  return { onLogin: (email, password) => dispatch(actions.authLogin(email, password)) };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

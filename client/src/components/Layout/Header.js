@@ -38,7 +38,6 @@ class Header extends Component {
           />
           <Typography
             className={classes.TopTitle}
-            variant="display1"
             color="inherit"
           >
             T A R O N T S I

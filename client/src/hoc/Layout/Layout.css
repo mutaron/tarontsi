@@ -1,3 +1,23 @@
-.Content {
-    margin-top: 72px;
+.Content{
+    margin: auto;   
+}
+@media (min-width: 500px) and (min-height: 400px) {
+    .Content {
+        width: 350px;
+        height: 300px;
+    }
+}
+
+@media (min-width: 500px) and (min-height: 401px) {
+    .Content {
+        width: 450px;
+        height: 400px;
+    }
+}
+
+@media (min-width: 1000px) and (min-height: 700px) {
+    .Content {
+        width: 1000px;
+        height: 800px;
+    }
 }

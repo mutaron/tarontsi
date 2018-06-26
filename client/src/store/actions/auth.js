@@ -8,33 +8,87 @@ export const authStart = () => {
     type: actionTypes.AUTH_START
   };
 };
-export const authSuccess = (token, user) => {
+
+export const authSuccess = ( { isAuth, user } ) => {
+  const expirationDate = null;
+  localStorage.setItem("expirationDate", expirationDate); //TODO need to implement session expiration
+  localStorage.setItem("user", user);
+  localStorage.setItem( "token", user.token );
+  
   return {
     type: actionTypes.AUTH_SUCCESS,
-    token: token,
+    token: user.token,
+    isAuth: isAuth,
     user: user
   };
 };
+
 export const authFail = error => {
   return {
     type: actionTypes.AUTH_FAIL,
     error: error
   };
 };
-export const auth = ( email, password ) => {
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("expirationDate");
+  localStorage.removeItem("user");
+  return {
+    isAuth: false,
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
+
+export const authLogin = (email, password) => {
   return dispatch => {
-    dispatch( authStart() );
-    const request = axios
+    dispatch(authStart());
+    axios
       .post(URL + "/user/login", { email, password })
-      .then(response => {
-        localStorage.setItem("token", response.data.user.token);
-        //localStorage.setItem("expirationDate", expirationDate);
-        localStorage.setItem("user", response.data.user);
-        dispatch(authSuccess(response.data.user.token, response.data.user));
+      .then( response => {
+        dispatch(authSuccess(response.data));
       })
       .catch(err => {
         dispatch(authFail(err.response.data.error));
-      });;
-  }
+      });
+  };
+};
 
+export const authLogout = () => {
+    return dispatch => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        dispatch(logout());
+      }
+      else {
+        axios
+          .post(URL + "/user/logout", { token })
+          .then(response => {
+            dispatch(logout(response.data.success));
+          })
+          .catch(err => {
+            dispatch(authFail(err.response.data.error));
+          });
+      }
+    };
+};
+
+export const authCheck = () => {
+  return dispatch => {
+    const token = localStorage.getItem( "token" );
+    
+    if (!token) {
+      dispatch(logout());
+    }
+    else
+    {
+      axios
+        .then( response => {
+          dispatch( authSuccess( response.data ) );
+        } )
+        .catch( err => {
+          dispatch( authFail( err.response.data.error ) );
+        } );
+    }
+  };
 };

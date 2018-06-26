@@ -1,6 +1,7 @@
 const express = require("express");
 
 const { User } = require( "../models" );
+const { authCheck } = require("../middleware/auth-check");
 
 const router = express.Router();
 
@@ -19,7 +20,6 @@ router.post("/register", (req, res) => {
 });
 
 router.post( "/login", ( req, res ) => {
-  console.log(User);
   User.findOne({ 'email': req.body.email }, (err, user) => {
     if (!user)
       return res.json({
@@ -32,14 +32,22 @@ router.post( "/login", ( req, res ) => {
           isAuth: false,
           message: "Wrong password"
         });
-      user.generateToken((err, user) => {
-        if (err) return res.status(400).send(err);
-        res.cookie("auth", user.token).json({
+      user.generateToken( ( err, user ) => {
+        if ( err ) return res.status( 400 ).send( err );        
+        res.cookie("x-auth", user.token).json({
           isAuth: true,
           user
         });
       });
     });
+  });
+} );
+
+router.post( "/logout", authCheck, ( req, res ) => {
+  console.log(req)
+  req.user.deleteToken(req.body.token, (err, user) => {
+    if (err) return res.status(400).send(err);
+    res.status( 200 ).json( {success: true});
   });
 });
 
@@ -58,5 +66,18 @@ router.post("/confirmregisteration", (req, res) => {
 });
 
 //////****** END OF POST  *******/
+
+//////******  GET  *******/
+
+
+router.get("/auth", authCheck, (req, res) => {
+  res.json({
+    isAuth: true,
+    user:req.user
+  });
+});
+
+//////****** END OF GET  *******/
+
 
 module.exports = router;

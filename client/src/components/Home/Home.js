@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 
+import classes from './Home.css';
+
 class Home extends Component {
   render() {
     return (
-      <div>
+      <div className={classes.Main }>
         home
       </div>
     );

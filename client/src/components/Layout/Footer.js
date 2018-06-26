@@ -6,12 +6,20 @@ import {
   Tab,
   Typography
 } from "material-ui";
-import { Home, PermPhoneMsg, SupervisorAccount } from "material-ui-icons";
+import {
+  Home,
+  PermPhoneMsg,
+  SupervisorAccount,
+  Kitchen
+} from "material-ui-icons";
 import classes from "./MainLayout.css";
 
 class Footer extends Component {
-  state = { value: 0 };
-  
+  state = {
+    value: 0,
+    admin: false
+  };
+
   handleChange = ( event, value ) => {
     this.setState( { value } );
     if ( value === 1 ) {
@@ -27,17 +35,15 @@ class Footer extends Component {
   };
 
   render() {
-    const { value } = this.state;
-
+    const { value, admin } = this.state;
+    const tabAdmin = admin ? <Tab icon={<Kitchen />} label="Admin" /> : null
     return <div>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.FooterContainer}>
           <Tabs className={classes.TabItem} value={value} onChange={this.handleChange} scrollable scrollButtons="off">
-            {/* <Tab value={0} icon={<Home />} label="Home" />
-            <Tab value={1} icon={<SupervisorAccount />} label="About us" />
-            <Tab value={2} icon={<PermPhoneMsg />} label="Contact us" /> */}
             <Tab icon={<Home />} label="Home" />
             <Tab icon={<SupervisorAccount />} label="About us" />
             <Tab icon={<PermPhoneMsg />} label="Contact us" />
+            {tabAdmin}
           </Tabs>
         </AppBar>
       </div>;
