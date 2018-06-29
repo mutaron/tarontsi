@@ -4,8 +4,6 @@ import {
   Card,
   CardContent,
   Typography,
-  FormHelperText,
-  FormControl,
   Button
 } from "material-ui";
 
@@ -36,7 +34,7 @@ class Login extends Component {
         elementType: "input",
         elementConfig: {
           type: "password",
-          placeholder: "Password"
+          placeholder: "6 or more charachters"
         },
         value: "123456",
         validation: {
@@ -49,13 +47,17 @@ class Login extends Component {
     }
   };
   
-  submitHandler = event => {
-    event.preventDefault();
-    
+  submitHandler = e => {
+    e.preventDefault();
     this.props.onLogin(
       this.state.controls.Email.value,
       this.state.controls.Password.value
     );
+    
+    if ( this.props.isAuth )
+    {
+      this.props.history.push( "/" ); 
+    }  
   };
   inputChangedHandler = (event, controlName) => {
     const updatedControls = updateObject(this.state.controls, {
@@ -74,60 +76,71 @@ class Login extends Component {
   render() {
     const formElementsArray = [];
     for (let key in this.state.controls) {
-      formElementsArray.push({
+      formElementsArray.push( {
         id: key,
-        config: this.state.controls[key]
-      });
-    }
-    let form =
-      formElementsArray.map( formElement => (
-        <Input
-          key={ formElement.id }
-          id={ formElement.id }
-          elementType={ formElement.config.elementType }
-          elementConfig={ formElement.config.elementConfig }
-          value={ formElement.config.value }
-          invalid={ !formElement.config.valid }
-          shouldValidate={ formElement.config.validation }
-          touched={ formElement.config.touched }
-          changed={ event => this.inputChangedHandler( event, formElement.id ) }
-        />
-      ) );
-    
+        config: this.state.controls[ key ]
+      } );
+    };
+    let form = formElementsArray.map( formElement => (
+      <Input
+        key={ formElement.id }
+        id={ formElement.id }
+        elementType={ formElement.config.elementType }
+        elementConfig={ formElement.config.elementConfig }
+        value={ formElement.config.value }
+        invalid={ !formElement.config.valid }
+        shouldValidate={ formElement.config.validation }
+        touched={ formElement.config.touched }
+        changed={ event =>
+          this.inputChangedHandler( event, formElement.id )
+        }
+      />
+    ) );
     form = <Fragment>
-          {form}
-          <br />
-          <Button type="submit">Login</Button>
-        </Fragment>;
-    
-    if ( this.props.loading ) {
+      { form }
+      <br />
+      <Button onClick={ this.submitHandler } type="submit" color="primary" variant="raised">
+        Login
+      </Button>
+      <br />
+    </Fragment>;
+
+    if (this.props.loading) {
       form = <Spinner />;
-    }
+    };
 
     let errorMessage = null;
+
+    if (this.props.error) {
+      errorMessage = <p className={ classes.error }>{ this.props.error }</p>;
+    };
+
     return <Fragment>
-        <form onSubmit={this.submitHandler}>
-          <Card className={classes.Card}>
-            <CardContent>
-              <Typography variant="display1" align="center" color="textSecondary">
-                Login
-              </Typography>
-              {form}
-              <br />
-              <br />
-              <Typography variant="caption" align="center" color="textSecondary">
-                Not a member?
-              </Typography>
-              <Button>Sign up</Button>
-            </CardContent>
-          </Card>
-        </form>
-      </Fragment>;
-  }
+      <form onSubmit={ this.submitHandler }>
+        <Card className={ classes.Card }>
+          <CardContent>
+            <Typography variant="display1" align="center" color="textSecondary">
+              Login
+            </Typography>
+            { form }
+            <br />
+            {errorMessage}
+            <Typography variant="caption" align="center" color="textSecondary">
+              Not a member?
+            </Typography>
+            <Button>Sign up</Button>
+          </CardContent>
+        </Card>
+      </form>
+    </Fragment>;
+    }
 }
 const mapStateToProps = state => {
   return {
-    loading: state.auth.loading
+    loading: state.auth.loading,
+    isAuth: state.auth.isAuth,
+    user: state.auth.user,
+    error: state.auth.error
   };
 };
 

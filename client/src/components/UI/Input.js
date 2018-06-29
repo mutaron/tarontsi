@@ -2,20 +2,21 @@ import React from 'react';
 import {
   Input,
   InputLabel,
-  Typography,
   FormHelperText,
   FormControl,
-  Button,
   InputAdornment
 } from "material-ui";
 import { AccountCircle, Lock } from "material-ui-icons";
 
+import classes from "./UI.css";
+
 const CustomInput = props => {
   let inputElement = null;
-  //let err = false;
-
+  let err = '', error=false;
+  
   if (props.invalid && props.shouldValidate && props.touched) {
-    //props.elementConfig.push("error");
+    err = 'Invalid Field Value';
+    error = true;
   }
   switch (props.elementType) {
     case "input":
@@ -28,22 +29,23 @@ const CustomInput = props => {
           icon = <AccountCircle />;
         }
 
-      inputElement = 
-            <FormControl>
-              <InputLabel htmlFor={props.id}>{props.id}</InputLabel>
-              <Input
-                startAdornment= {
+      inputElement = <div className={classes.FormControl}>
+          <FormControl error={error}>
+            <InputLabel htmlFor={props.id}>{props.id}</InputLabel>
+            <Input
+              startAdornment={
                   <InputAdornment position="start">
                     {icon}
-                  </InputAdornment>
-                } 
-                value={props.value}
-                onChange={props.changed}
-                {...props.elementConfig}
-              />
-              <FormHelperText id={`${props.id}-error-text`} />
-            </FormControl>
-      
+                  </InputAdornment> }
+              error={error}  
+              value={ props.value }
+              onChange={ props.changed }
+              { ...props.elementConfig } />
+            <FormHelperText id={`${props.id}-error-text`}>
+              {err}
+            </FormHelperText>
+          </FormControl>
+        </div>;
       break;
     case "textarea":
       inputElement = (

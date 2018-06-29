@@ -44,7 +44,6 @@ router.post( "/login", ( req, res ) => {
 } );
 
 router.post( "/logout", authCheck, ( req, res ) => {
-  console.log(req)
   req.user.deleteToken(req.body.token, (err, user) => {
     if (err) return res.status(400).send(err);
     res.status( 200 ).json( {success: true});
@@ -73,7 +72,7 @@ router.post("/confirmregisteration", (req, res) => {
 router.get("/auth", authCheck, (req, res) => {
   res.json({
     isAuth: true,
-    user:req.user
+    user: req.user
   });
 });
 

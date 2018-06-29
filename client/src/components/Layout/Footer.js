@@ -3,8 +3,7 @@ import { withRouter } from "react-router-dom";
 import {
   AppBar,
   Tabs,
-  Tab,
-  Typography
+  Tab
 } from "material-ui";
 import {
   Home,
@@ -12,12 +11,14 @@ import {
   SupervisorAccount,
   Kitchen
 } from "material-ui-icons";
+import { connect } from "react-redux";
+
+
 import classes from "./MainLayout.css";
 
 class Footer extends Component {
   state = {
-    value: 0,
-    admin: false
+    value: 0
   };
 
   handleChange = ( event, value ) => {
@@ -31,11 +32,15 @@ class Footer extends Component {
     else {
       this.props.history.push("/");            
     }
-    console.log( value===1 );
   };
 
   render() {
-    const { value, admin } = this.state;
+    const { value } = this.state;
+    let admin = false;
+
+    if ( this.props.user ) {
+      admin  = this.props.user.role === 3;
+    };
     const tabAdmin = admin ? <Tab icon={<Kitchen />} label="Admin" /> : null
     return <div>
         <AppBar position="static" className={classes.FooterContainer}>
@@ -49,4 +54,9 @@ class Footer extends Component {
       </div>;
   }
 }
-export default withRouter(Footer);
+const mapStateToProps = state => {
+  return {
+    user: state.auth.user
+  }
+}
+export default connect(mapStateToProps) (withRouter(Footer));

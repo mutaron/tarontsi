@@ -6,17 +6,29 @@
 .TopTitle{
   padding: 10px;  
 }
+.TopTitleAvatar{
+  padding: 10px; 
+}
 .Login{
   margin:auto 0 auto auto;
+  vertical-align: right;
 }
 .Login span{
   color: snow;
+  vertical-align: right;  
 }
 .Logout{
   margin:auto 0 auto auto;
+  vertical-align: right;  
 }
 .Logout span{
   color: red;
+  vertical-align: right;  
+}
+.Avatar{
+  margin: 0 0 auto auto;  
+  margin-top: 4px;
+  cursor: pointer;
 }
 .TabItem{
   display: flex;
@@ -26,4 +38,12 @@
 .FooterContainer{
   position:absolute;
   bottom:0;
+}
+.AvatarContainer{ 
+  display: flex;
+  align-items: center;
+}
+.AvatarContainer p{ 
+  color: snow;
+
 }

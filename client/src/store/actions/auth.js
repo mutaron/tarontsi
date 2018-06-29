@@ -23,10 +23,11 @@ export const authSuccess = ( { isAuth, user } ) => {
   };
 };
 
-export const authFail = error => {
+export const authFail = errMssg => {
   return {
     type: actionTypes.AUTH_FAIL,
-    error: error
+    error: errMssg,
+    isAuth: false,    
   };
 };
 
@@ -46,17 +47,25 @@ export const authLogin = (email, password) => {
     axios
       .post(URL + "/user/login", { email, password })
       .then( response => {
-        dispatch(authSuccess(response.data));
+        if ( response.data.isAuth )
+        {
+          dispatch( authSuccess( response.data ) );
+        }  
+        else
+        {
+          dispatch(authFail(response.data.message));  
+        }  
       })
-      .catch(err => {
-        dispatch(authFail(err.response.data.error));
+      .catch( err => {
+        dispatch(authFail(err));
       });
   };
 };
 
 export const authLogout = () => {
     return dispatch => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem( "token" );
+      console.log(token)
       if (!token) {
         dispatch(logout());
       }

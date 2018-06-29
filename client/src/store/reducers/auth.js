@@ -15,10 +15,21 @@ const authStart = ( state, action ) => {
 };
 
 const authLogin = ( state, action ) => {
+
   return updateObject( state, {
     isAuth: action.isAuth,
     token: action.user.token,
     user: action.user,
+    error: null,
+    loading: false
+  });
+};
+
+const authLogout = (state, action) => {
+  return updateObject(state, {
+    isAuth: false,
+    token: null,
+    user: null,
     error: null,
     loading: false
   });
@@ -38,13 +49,15 @@ const authCheck = (state, action) => {
 };
 
 const reducer = ( state = initialState, action ) => {
-    switch ( action.type ) {
-      case actionTypes.AUTH_SUCCESS: return authLogin(state, action);
-      case actionTypes.AUTH_FAIL: return authFail( state, action );
-      case actionTypes.AUTH_CHECK: return authCheck( state, action );
+  switch ( action.type ) {
+    case actionTypes.AUTH_START: return authStart( state, action );
+    case actionTypes.AUTH_SUCCESS: return authLogin(state, action);
+    case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
+    case actionTypes.AUTH_FAIL: return authFail( state, action );
+    case actionTypes.AUTH_CHECK: return authCheck( state, action );
 
-      default:
-        return state;
+    default:
+      return state;
     }
 };
 
