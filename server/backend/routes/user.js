@@ -8,18 +8,20 @@ const router = express.Router();
 
 //////******  POST  *******/
 
-router.post("/register", (req, res) => {
-  User.findOne({ 'email': req.body.email }, (err, u) => {
-    if (u) return res.json({ status: 404, message: "Email exists." });
-    const user = new User(req.body);
+router.post( "/register", ( req, res ) => {
+  console.log(req);
+  
+  User.findOne({ 'email': req.body.user.email }, (err, u) => {
+    if (u) return res.json({ status: 404, isAuth: false, error: "Email exists." });
+    const user = new User(req.body.user);
     user.save((err, doc) => {
       if (err) return res.json({ success: false, error: err.code });
-      res.status(201).json({ success: true, user: doc });
+      res.status(201).json({ isAuth: true, error: null, user: doc });
     });
   });
 });
 
-router.post( "/login", ( req, res ) => {
+router.post( "/login", ( req, res ) => {  
   User.findOne({ 'email': req.body.email }, (err, user) => {
     if (!user)
       return res.json({
@@ -31,7 +33,12 @@ router.post( "/login", ( req, res ) => {
         return res.json({
           isAuth: false,
           message: "Wrong password"
-        });
+        } );
+      if ( !user.active )
+        return res.json( {
+          isAuth: false,
+          message: "Account is not active. Please activate your account first"
+        } );
       user.generateToken( ( err, user ) => {
         if ( err ) return res.status( 400 ).send( err );        
         res.cookie("x-auth", user.token).json({
@@ -58,8 +65,8 @@ router.post("/confirmregisteration", (req, res) => {
     { $set: { active: true } },
     { new: true },
     (err, doc) => {
-      if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true });
+      if (err) return res.status(400).send(error);
+      res.status(200).json({ isAuth: true, user: doc });
     }
   );
 });

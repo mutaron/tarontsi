@@ -9,17 +9,18 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = ( { isAuth, user } ) => {
+export const authSuccess = ( { isAuth, user, error = null } ) => {
   const expirationDate = null;
-  localStorage.setItem("expirationDate", expirationDate); //TODO need to implement session expiration
-  localStorage.setItem("user", user);
+  localStorage.setItem( "expirationDate", expirationDate ); //TODO need to implement session expiration
+  localStorage.setItem( "user", user );
   localStorage.setItem( "token", user.token );
   
   return {
     type: actionTypes.AUTH_SUCCESS,
     token: user.token,
     isAuth: isAuth,
-    user: user
+    user: user,
+    error: null,
   };
 };
 
@@ -63,21 +64,22 @@ export const authLogin = (email, password) => {
 };
 
 export const authLogout = () => {
-    return dispatch => {
-      const token = localStorage.getItem( "token" );
-      console.log(token)
-      if (!token) {
+  return dispatch => {
+    dispatch(authStart());
+      
+    const token = localStorage.getItem( "token" );
+    if (!token) {
         dispatch(logout());
       }
-      else {
-        axios
-          .post(URL + "/user/logout", { token })
-          .then(response => {
-            dispatch(logout(response.data.success));
-          })
-          .catch(err => {
-            dispatch(authFail(err.response.data.error));
-          });
+    else {
+      axios
+        .post( URL + "/user/logout", { token } )
+        .then( response => {
+          dispatch( logout( response.data.success ) );
+        } )
+        .catch( err => {
+          dispatch( authFail( err.response.data.error ) );
+        } );
       }
     };
 };
@@ -99,5 +101,43 @@ export const authCheck = () => {
           dispatch( authFail( err.response.data.error ) );
         } );
     }
+  };
+};
+
+export const authRegister = ( user ) => {
+  return dispatch => {
+    dispatch(authStart());
+    axios
+      .post(URL + "/user/register", { user })
+      .then(response => {
+        if (response.data.isAuth) {
+          dispatch(authSuccess(response.data));
+        }
+        else {
+          dispatch(authFail(response.data.error));
+        }
+      })
+      .catch(err => {
+        dispatch(authFail(err));
+      });
+  };
+};
+
+export const authConfirmRegisteration = id => {
+  return dispatch => {
+    dispatch(authStart());
+    axios
+      .post(`${URL}/user/confirmregisteration?id=${id}`)
+      .then(response => {
+        if ( response.data.isAuth ) {
+          console.log(response.data);
+          dispatch(authSuccess(response.data));
+        } else {
+          dispatch(authFail(response.data.error));
+        }
+      })
+      .catch(err => {
+        dispatch(authFail(err));
+      });
   };
 };

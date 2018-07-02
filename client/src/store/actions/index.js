@@ -1,1 +1,7 @@
-export { authLogin, authCheck, authLogout } from "./auth";
+export {
+  authLogin,
+  authCheck,
+  authLogout,
+  authRegister,
+  authConfirmRegisteration
+} from "./auth";

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classes from './Layout.css';
-//import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
 import Header from "../../components/Layout/Header";
 import Footer from '../../components/Layout/Footer';
 

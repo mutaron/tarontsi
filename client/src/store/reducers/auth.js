@@ -14,9 +14,18 @@ const authStart = ( state, action ) => {
   return updateObject(state, { error: null, loading: true });
 };
 
-const authLogin = ( state, action ) => {
+// const authLogin = ( state, action ) => {
+//   return updateObject( state, {
+//     isAuth: action.isAuth,
+//     token: action.user.token,
+//     user: action.user,
+//     error: null,
+//     loading: false
+//   });
+// };
 
-  return updateObject( state, {
+const authSuccess = ( state, action ) => {
+  return updateObject(state, {
     isAuth: action.isAuth,
     token: action.user.token,
     user: action.user,
@@ -24,7 +33,6 @@ const authLogin = ( state, action ) => {
     loading: false
   });
 };
-
 const authLogout = (state, action) => {
   return updateObject(state, {
     isAuth: false,
@@ -51,10 +59,12 @@ const authCheck = (state, action) => {
 const reducer = ( state = initialState, action ) => {
   switch ( action.type ) {
     case actionTypes.AUTH_START: return authStart( state, action );
-    case actionTypes.AUTH_SUCCESS: return authLogin(state, action);
+    case actionTypes.AUTH_SUCCESS: return authSuccess(state, action);
     case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
     case actionTypes.AUTH_FAIL: return authFail( state, action );
-    case actionTypes.AUTH_CHECK: return authCheck( state, action );
+    case actionTypes.AUTH_CHECK: return authCheck(state, action);
+    case actionTypes.AUTH_REGISTER: return authSuccess(state, action);
+    case actionTypes.AUTH_CONFIRM_REGISTER: return authSuccess(state, action);
 
     default:
       return state;

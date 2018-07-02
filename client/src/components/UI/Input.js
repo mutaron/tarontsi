@@ -12,38 +12,38 @@ import classes from "./UI.css";
 
 const CustomInput = props => {
   let inputElement = null;
-  let err = '', error=false;
+  let err = '';
+  let error = false;
   
   if (props.invalid && props.shouldValidate && props.touched) {
-    err = 'Invalid Field Value';
+    err = "Invalid Field Value";
     error = true;
   }
   switch (props.elementType) {
     case "input":
       let icon = null;  
-      if ( props.id  === 'Password' ) {
+      if ( props.elementConfig.type  === 'password' ) {
            icon = <Lock />;
-         } 
-         else
-        {
+      } 
+      else {
           icon = <AccountCircle />;
-        }
+      }
 
       inputElement = <div className={classes.FormControl}>
           <FormControl error={error}>
-            <InputLabel htmlFor={props.id}>{props.id}</InputLabel>
+            <InputLabel htmlFor={props.id}>{props.elementConfig.label}</InputLabel>
             <Input
               startAdornment={
                   <InputAdornment position="start">
                     {icon}
                   </InputAdornment> }
-              error={error}  
-              value={ props.value }
-              onChange={ props.changed }
-              { ...props.elementConfig } />
-            <FormHelperText id={`${props.id}-error-text`}>
-              {err}
-            </FormHelperText>
+                error={error}  
+                value={ props.value }
+                onChange={ props.changed }
+                { ...props.elementConfig } />
+              <FormHelperText id={`${props.id}-error-text`}>
+                {err}
+              </FormHelperText>
           </FormControl>
         </div>;
       break;

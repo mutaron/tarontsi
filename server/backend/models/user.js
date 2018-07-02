@@ -81,7 +81,7 @@ userSchema.pre( 'save', function ( next ) {
       from: 'info@tarontsi.com', // sender address
       to: user.email, // This can also contain an array of emails
       subject: 'Thanks for registering with tarontsi.com',
-      html: "<b>Please click this url</b> http://localhost:3000/user/confirmregisteration?id=" + user.confirmtoken + "<br/><b>to finish your registration</b>"
+      html: "<b>Please click this url</b> http://localhost:3000/user/confirmregisteration/" + user.confirmtoken + "<br/><b>to finish your registration</b>"
 
     };
     
