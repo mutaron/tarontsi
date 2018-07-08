@@ -86,6 +86,27 @@ class Profile extends Component {
       }
     }
   };
+
+  // componentDidUpdate ( prevProps, prevState ) {
+  //   if (prevProps.user !== this.props.user) {
+  //     const { isAuth, user } = this.props;
+  //     if ( isAuth ) {
+  //       const controlsToUpdate = [ "Email", "FirstName", "LastName" ].map( controlName => {
+  //         const updatedControls = updateObject(this.state.controls, {
+  //           [controlName]: updateObject(
+  //             this.state.controls[controlName],
+  //             {
+  //               value: 'user.email'
+  //             }
+  //           )
+  //         } );
+          
+  //         this.setState( { controls: updatedControls } );
+  //       });
+  //     }
+  //   }
+  // }
+
   submitHandler = e => {
     e.preventDefault();
     const user = {
@@ -94,8 +115,7 @@ class Profile extends Component {
       firstname: this.state.controls.FirstName.value,
       lastname: this.state.controls.LastName.value
     };
-    this.props.onRegister( user );
-
+    this.props.onRegister(user);
     if (this.props.isAuth) {
       this.props.history.push("/");
     }
@@ -122,6 +142,8 @@ class Profile extends Component {
   };
 
   render() {
+    //const { isAuth, user } = this.props;
+
     const formElementsArray = [];
     for (let key in this.state.controls) {
       formElementsArray.push({
@@ -157,10 +179,13 @@ class Profile extends Component {
         <br />
       </Fragment>
     );
-    if ( this.props.user && !this.props.user.active )
-    {
-      form = <p className={classes.error}>You are already registered, you just need to activate your profile</p>;
-    }  
+    if (this.props.user && !this.props.user.active) {
+      form = (
+        <p className={classes.error}>
+          You are already registered, you just need to activate your profile
+        </p>
+      );
+    }
     if (this.props.loading) {
       form = <Spinner />;
     }

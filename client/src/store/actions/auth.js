@@ -9,7 +9,7 @@ export const authStart = () => {
   };
 };
 
-export const authSuccess = ( { isAuth, user, error = null } ) => {
+export const authSuccess = ( { isAuth, user } ) => {
   const expirationDate = null;
   localStorage.setItem( "expirationDate", expirationDate ); //TODO need to implement session expiration
   localStorage.setItem( "user", user );
@@ -21,6 +21,7 @@ export const authSuccess = ( { isAuth, user, error = null } ) => {
     isAuth: isAuth,
     user: user,
     error: null,
+    selectedTab: localStorage.getItem( "selectedTab" )
   };
 };
 
@@ -33,16 +34,13 @@ export const authFail = errMssg => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("expirationDate");
-  localStorage.removeItem("user");
   return {
     isAuth: false,
     type: actionTypes.AUTH_LOGOUT
   };
 };
 
-export const authLogin = (email, password) => {
+export const authLogin = ( email, password ) => {  
   return dispatch => {
     dispatch(authStart());
     axios
@@ -60,6 +58,15 @@ export const authLogin = (email, password) => {
       .catch( err => {
         dispatch(authFail(err));
       });
+  };
+};
+
+export const authTabChange = ( tabIndex ) => {
+  localStorage.setItem("selectedTab", tabIndex.value);
+  
+  return {
+    selectedTab: tabIndex,
+    type: actionTypes.AUTH_TAB_CHANGE
   };
 };
 
@@ -84,22 +91,24 @@ export const authLogout = () => {
     };
 };
 
-export const authCheck = () => {
+export const authCheck = ( tabindex ) => {
   return dispatch => {
-    const token = localStorage.getItem( "token" );
-    
+    let token = localStorage.getItem( "token" );
     if (!token) {
       dispatch(logout());
     }
     else
     {
+      token = "Bearer " + token ;
       axios
-        .then( response => {
-          dispatch( authSuccess( response.data ) );
-        } )
-        .catch( err => {
-          dispatch( authFail( err.response.data.error ) );
-        } );
+        .get(URL + "/user/auth", { headers: { Authorization: token } })
+        .then(response => {
+          dispatch(authSuccess(response.data), tabindex);
+        })
+        .catch(err => {
+          console.log(err);
+          dispatch(authFail(err.data));
+        });
     }
   };
 };

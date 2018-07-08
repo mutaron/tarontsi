@@ -3,5 +3,6 @@ export {
   authCheck,
   authLogout,
   authRegister,
-  authConfirmRegisteration
+  authConfirmRegisteration,
+  authTabChange
 } from "./auth";

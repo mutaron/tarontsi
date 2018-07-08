@@ -20,6 +20,9 @@ class Header extends Component {
   handleChange = ( event, checked ) => {
     if ( this.props.isAuth )
     {
+      localStorage.removeItem("token");
+      localStorage.removeItem("expirationDate");
+      localStorage.removeItem("user");
       this.props.onLogout();
     } 
     this.props.isAuth ? this.props.history.push("/") : this.props.history.push("/login");    
@@ -51,8 +54,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return { onLogout: () => dispatch(actions.authLogout()) };
 };
-export default 
+export default
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withRouter(Header));
+  )( withRouter( Header ) );

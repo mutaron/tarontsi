@@ -1,8 +1,12 @@
 const { User } = require("./../models/user");
 
 let authCheck = ( req, res, next ) => {
-  let token = req.body.token;
-
+  let token = null;
+  if ( req.get )
+    token = req.headers.authorization.split( " " )[ 1 ];
+  else
+    token = req.body.token;
+  
   User.findByToken(token, (err, user) => {
     if (err) throw err;
     if (!user)
@@ -14,5 +18,4 @@ let authCheck = ( req, res, next ) => {
     next();
   });
 };
-
 module.exports = { authCheck };

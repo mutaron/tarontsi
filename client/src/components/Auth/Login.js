@@ -48,17 +48,19 @@ class Login extends Component {
       }
     }
   };
-  
+  static getDerivedStateFromProps(props) {
+    if (props.isAuth) {
+      return props.history.push("/") || null;
+    }
+    else
+      return null;
+  }
   submitHandler = e => {
     e.preventDefault();
     this.props.onLogin(
       this.state.controls.Email.value,
       this.state.controls.Password.value
     );
-
-    if (this.props.isAuth) {
-      this.props.history.push("/");
-    }
   };
 
   inputChangedHandler = ( event, controlName ) => {
@@ -135,16 +137,15 @@ class Login extends Component {
                 Login
               </Typography>
               {form}
-              <br />
               {errorMessage}
-              <Typography
+              {/* <Typography
                 variant="caption"
                 align="center"
                 color="textSecondary"
               >
                 Not a member?
               </Typography>
-              <Button>Sign up</Button>
+              <Button>Sign up</Button> */}
             </CardContent>
           </Card>
         </form>

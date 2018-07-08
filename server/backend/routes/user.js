@@ -76,7 +76,7 @@ router.post("/confirmregisteration", (req, res) => {
 //////******  GET  *******/
 
 
-router.get("/auth", authCheck, (req, res) => {
+router.get( "/auth", authCheck, ( req, res ) => {
   res.json({
     isAuth: true,
     user: req.user

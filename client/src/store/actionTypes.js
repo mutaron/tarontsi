@@ -5,3 +5,4 @@ export const AUTH_LOGOUT = "AUTH_LOGOUT";
 export const AUTH_CHECK = "AUTH_CHECK";
 export const AUTH_REGISTER = "AUTH_REGISTER";
 export const AUTH_CONFIRM_REGISTER = "AUTH_CONFIRM_REGISTER";
+export const AUTH_TAB_CHANGE = "AUTH_TAB_CHANGE";

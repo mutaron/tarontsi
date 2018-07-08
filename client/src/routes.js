@@ -8,16 +8,21 @@ import ContactUs from "./components/Home/Contactus";
 import AboutUs from "./components/Home/Aboutus";
 import Layout from './hoc/Layout/Layout';
 import Profile from "./components/Auth/Profile";
+import authCheck from "./hoc/Auth";
+import AdminHome from './components/User/Admin/AdminHome';
+import DailyLedger from './components/User/Admin/DailyLedger'; 
 
 export default Rountes => (
   <Layout>
     <Switch>
-      <Route path="/login" exact component={Login} />
-      <Route path="/user/confirmregisteration/:id" exact component={ConfirmRegisteration} />
-      <Route path="/profile" exact component={Profile} />
-      <Route path="/contactus" exact component={ContactUs} />
-      <Route path="/aboutus" exact component={AboutUs} />
-      <Route path="/" component={Home} />
+      <Route path="/login" exact component={authCheck(Login, "-1")} />
+      <Route path="/user/confirmregisteration/:id" exact component={authCheck(ConfirmRegisteration, "0")} />
+      <Route path="/profile" exact component={authCheck(Profile, "0")} />
+      <Route path="/contactus" exact component={authCheck(ContactUs, "0")} />
+      <Route path="/admin/ledger" exact component={authCheck(DailyLedger, "3")} />
+      <Route path="/aboutus" exact component={authCheck(AboutUs, "0")} />
+      <Route path="/admin/home" exact component={authCheck(AdminHome, "3")} />
+      <Route path="/" component={authCheck(Home, "0")} />
     </Switch>
   </Layout>
 );

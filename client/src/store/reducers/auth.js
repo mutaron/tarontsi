@@ -7,7 +7,8 @@ const initialState = {
   user: null,
   error: null,
   loading: false,
-  authRedirectPath: "/"
+  authRedirectPath: "/",
+  selectedTab: 0
 };
 
 const authStart = ( state, action ) => {
@@ -25,10 +26,12 @@ const authStart = ( state, action ) => {
 // };
 
 const authSuccess = ( state, action ) => {
+  
   return updateObject(state, {
     isAuth: action.isAuth,
     token: action.user.token,
     user: action.user,
+    selectedTab: action.selectedTab,
     error: null,
     loading: false
   });
@@ -42,7 +45,13 @@ const authLogout = (state, action) => {
     loading: false
   });
 };
-
+const authTabChange = ( state, action ) => {
+  return updateObject(state, {
+    selectedTab: action.selectedTab,
+    error: null,
+    loading: false
+  });
+};
 const authFail = (state, action) => {
   return updateObject(state, {
     error: action.error,
@@ -50,9 +59,13 @@ const authFail = (state, action) => {
   });
 };
 
-const authCheck = (state, action) => {
+const authCheck = ( state, action ) => {
   return updateObject(state, {
-    login: action.payload
+    isAuth: action.isAuth,
+    token: action.user.token,
+    user: action.user,
+    error: null,
+    loading: false
   });
 };
 
@@ -65,6 +78,7 @@ const reducer = ( state = initialState, action ) => {
     case actionTypes.AUTH_CHECK: return authCheck(state, action);
     case actionTypes.AUTH_REGISTER: return authSuccess(state, action);
     case actionTypes.AUTH_CONFIRM_REGISTER: return authSuccess(state, action);
+    case actionTypes.AUTH_TAB_CHANGE: return authTabChange(state, action);
 
     default:
       return state;

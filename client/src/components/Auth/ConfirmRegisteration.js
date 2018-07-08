@@ -9,7 +9,6 @@ import classes from "./Auth.css";
 class ConfirmRegisteration extends Component {
   constructor(props) {
     super( props );
-    this.props.match.params.id;
     this.props.onConfirmRegisteration(this.props.match.params.id);
   };
 
@@ -17,7 +16,6 @@ class ConfirmRegisteration extends Component {
     let form = "";
     const { user } = this.props;
       
-    console.log(user)
     if (user && user.active)
       form = <p className={classes.error}>You profile has been activated</p>;
     else form = <p className={classes.error}>Invalid token</p>;
