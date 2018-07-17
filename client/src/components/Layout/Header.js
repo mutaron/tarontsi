@@ -17,12 +17,13 @@ import * as actions from "../../store/actions";
 
 class Header extends Component {
 
-  handleChange = ( event, checked ) => {
+  switchChangeHandler = ( event, checked ) => {
     if ( this.props.isAuth )
     {
       localStorage.removeItem("token");
       localStorage.removeItem("expirationDate");
       localStorage.removeItem("user");
+      localStorage.removeItem("selectedTab");
       this.props.onLogout();
     } 
     this.props.isAuth ? this.props.history.push("/") : this.props.history.push("/login");    
@@ -38,7 +39,7 @@ class Header extends Component {
           </Typography>
           <FormGroup className={isAuth ? classes.Logout : classes.Login}>
             <HeaderAvatar isAuth={isAuth} user={user} />
-            <FormControlLabel control={<Switch checked={isAuth} onChange={this.handleChange} />} label={isAuth ? "Logout" : "Login"} />
+            <FormControlLabel control={<Switch checked={isAuth} onChange={this.switchChangeHandler} />} label={isAuth ? "Logout" : "Login"} />
           </FormGroup>
         </Toolbar>
       </AppBar>;

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cookieParser = require( "cookie-parser" );
 
 const userRoutes = require("./routes/user");
+const ledgerRoutes = require("./routes/ledger");
 const config = require( './config/config' ).get( process.env.NODE_ENV );
 
 const app = express();
@@ -39,5 +40,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api/admin", ledgerRoutes);
 
 module.exports = app;

@@ -31,7 +31,6 @@ const authSuccess = ( state, action ) => {
     isAuth: action.isAuth,
     token: action.user.token,
     user: action.user,
-    selectedTab: action.selectedTab,
     error: null,
     loading: false
   });
@@ -42,7 +41,8 @@ const authLogout = (state, action) => {
     token: null,
     user: null,
     error: null,
-    loading: false
+    loading: false,
+    selectedTab: 0
   });
 };
 const authTabChange = ( state, action ) => {
@@ -69,7 +69,7 @@ const authCheck = ( state, action ) => {
   });
 };
 
-const reducer = ( state = initialState, action ) => {
+const authReducer = ( state = initialState, action ) => {
   switch ( action.type ) {
     case actionTypes.AUTH_START: return authStart( state, action );
     case actionTypes.AUTH_SUCCESS: return authSuccess(state, action);
@@ -85,4 +85,4 @@ const reducer = ( state = initialState, action ) => {
     }
 };
 
-export default reducer;
+export default authReducer;

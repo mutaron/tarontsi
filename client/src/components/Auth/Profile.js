@@ -142,7 +142,6 @@ class Profile extends Component {
   };
 
   render() {
-    //const { isAuth, user } = this.props;
 
     const formElementsArray = [];
     for (let key in this.state.controls) {

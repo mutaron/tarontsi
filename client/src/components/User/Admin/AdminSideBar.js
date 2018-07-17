@@ -17,6 +17,10 @@ const AdminSideBar = ( props ) => {
       GeneralLedger: {
         text: 'Daily Ledger',
         link: '/admin/ledger'
+      },
+      LedgerReport: {
+        text: 'Ledger Report',
+        link: '/admin/ledger_report'
       }
     },
     Pig: {

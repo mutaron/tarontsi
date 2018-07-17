@@ -10,18 +10,19 @@ export const authStart = () => {
 };
 
 export const authSuccess = ( { isAuth, user } ) => {
-  const expirationDate = null;
-  localStorage.setItem( "expirationDate", expirationDate ); //TODO need to implement session expiration
-  localStorage.setItem( "user", user );
-  localStorage.setItem( "token", user.token );
+  if ( user ) {
+    const expirationDate = null;
+    localStorage.setItem("expirationDate", expirationDate); //TODO need to implement session expiration
+    localStorage.setItem("user", user);
+    localStorage.setItem("token", user.token);
+  }
   
   return {
     type: actionTypes.AUTH_SUCCESS,
     token: user.token,
     isAuth: isAuth,
     user: user,
-    error: null,
-    selectedTab: localStorage.getItem( "selectedTab" )
+    error: null
   };
 };
 
@@ -65,7 +66,7 @@ export const authTabChange = ( tabIndex ) => {
   localStorage.setItem("selectedTab", tabIndex.value);
   
   return {
-    selectedTab: tabIndex,
+    selectedTab: tabIndex.value,
     type: actionTypes.AUTH_TAB_CHANGE
   };
 };
@@ -91,7 +92,7 @@ export const authLogout = () => {
     };
 };
 
-export const authCheck = ( tabindex ) => {
+export const authCheck = ( ) => {
   return dispatch => {
     let token = localStorage.getItem( "token" );
     if (!token) {
@@ -103,7 +104,7 @@ export const authCheck = ( tabindex ) => {
       axios
         .get(URL + "/user/auth", { headers: { Authorization: token } })
         .then(response => {
-          dispatch(authSuccess(response.data), tabindex);
+          dispatch(authSuccess(response.data));
         })
         .catch(err => {
           console.log(err);

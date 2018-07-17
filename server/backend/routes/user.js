@@ -1,16 +1,14 @@
 const express = require("express");
 
 const { User } = require( "../models" );
-const { authCheck } = require("../middleware/auth-check");
+const {authCheck} = require( "../middleware/auth-check" );
 
 const router = express.Router();
-
 
 //////******  POST  *******/
 
 router.post( "/register", ( req, res ) => {
-  console.log(req);
-  
+
   User.findOne({ 'email': req.body.user.email }, (err, u) => {
     if (u) return res.json({ status: 404, isAuth: false, error: "Email exists." });
     const user = new User(req.body.user);

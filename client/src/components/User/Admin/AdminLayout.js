@@ -10,12 +10,12 @@ import AdminSideBar from "./AdminSideBar";
 const AdminLayout = (props) => {
       return <Grid className={ classes.container } container>
         <Grid item xs={ 2 }>
-          <Paper>
+          <Paper style={{margin: '10px'} }>
             <AdminSideBar />
           </Paper>
         </Grid>
         <Grid item xs={ 10 }>
-          <Paper>
+          <Paper style={{width: '100%', margin: '10px'} }>
             {props.children}
           </Paper>
         </Grid>

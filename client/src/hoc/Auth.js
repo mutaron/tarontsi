@@ -7,15 +7,24 @@ export default function(ComposedClass, protectionLevel) {
     
     constructor( props ) {
       super( props );      
-      this.props.onCheckAuth( this.props.selectedTab );
+      this.props.onCheckAuth( );
       this.state = {
-        selectedTab:localStorage.getItem( "selectedTab" )
+        //selectedTab: localStorage.getItem( "selectedTab" )
       }
     }
     
     static getDerivedStateFromProps ( props ) {
-      if ( protectionLevel === '-1' &&  props.isAuth ) {
-        return props.history.push("/") || null;        
+      const { user } = props;
+      //const role = user ? user.role : 0
+      if ( user ) {
+        if (protectionLevel === "-1" && props.isAuth) {
+          return props.history.push("/") || null;
+        }
+        if ((protectionLevel === "1" || protectionLevel === "2") && !props.isAuth) {
+          return props.history.push("/") || null;
+        } else if (protectionLevel === "3" && user.role !== 3) {
+          return props.history.push("/") || null;
+        }
       }
       return null;
     }
@@ -28,12 +37,11 @@ export default function(ComposedClass, protectionLevel) {
   function mapStateToProps ( state ) {
     return {
       isAuth: state.auth.isAuth,
-      user: state.auth.user,
-      selectedTab: state.auth.selectedTab      
+      user: state.auth.user     
     };
   }
   const mapDispatchToProps = dispatch => {
-    return { onCheckAuth: tabindex => dispatch(actions.authCheck(tabindex)) };
+    return { onCheckAuth: () => dispatch(actions.authCheck()) };
   };
   return connect( mapStateToProps, mapDispatchToProps )(AuthenticationCheck);
 }

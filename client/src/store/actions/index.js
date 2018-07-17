@@ -6,3 +6,6 @@ export {
   authConfirmRegisteration,
   authTabChange
 } from "./auth";
+export {
+    adminAddLedger
+} from './admin';

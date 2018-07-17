@@ -6,7 +6,12 @@ import {
   FormControl,
   InputAdornment
 } from "material-ui";
-import { AccountCircle, Lock } from "material-ui-icons";
+import {
+  AccountCircle,
+  Lock,
+  InsertInvitation,
+  MonetizationOn
+} from "material-ui-icons";
 
 import classes from "./UI.css";
 
@@ -14,7 +19,7 @@ const CustomInput = props => {
   let inputElement = null;
   let err = '';
   let error = false;
-  
+
   if (props.invalid && props.shouldValidate && props.touched) {
     err = "Invalid Field Value";
     error = true;
@@ -25,10 +30,15 @@ const CustomInput = props => {
       if ( props.elementConfig.type  === 'password' ) {
            icon = <Lock />;
       } 
+      else if ( props.elementConfig.type === 'date' ) {
+        icon = <InsertInvitation />;
+      }
+      else if ( props.elementConfig.type === 'number' ) {
+        icon = <MonetizationOn />;
+      }  
       else {
           icon = <AccountCircle />;
       }
-
       inputElement = <div className={classes.FormControl}>
           <FormControl error={error}>
             <InputLabel htmlFor={props.id}>{props.elementConfig.label}</InputLabel>

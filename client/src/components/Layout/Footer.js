@@ -12,15 +12,17 @@ import {
   Kitchen
 } from "material-ui-icons";
 import { connect } from "react-redux";
-import * as actions from "../../store/actions/index";
 
 
 import classes from "./MainLayout.css";
 
 class Footer extends Component {
+  state = {
+    tabValue: localStorage.getItem( "selectedTab" )
+  };
 
-  handleChange = ( event, value ) => {
-    this.props.onTabChange({ value });
+  tabChangeHandler = ( event, value ) => {
+
     if ( value === 1 ) {
         this.props.history.push("/aboutus");      
     }
@@ -30,21 +32,28 @@ class Footer extends Component {
     else if ( value === 3 ) {
       this.props.history.push("/admin/home");      
     }  
-    else {
+    else if ( value === 0 ){
       this.props.history.push("/");            
     }
+
+    localStorage.setItem("selectedTab", value);
+    this.setState({ tabValue: Number(value) });
   };
 
   render() {
     let admin = false;
-//console.log(this.props.selectedTab.value);
+    let { tabValue } = this.state;
+    
+    if ( !tabValue ) tabValue = 0;
+    
     if ( this.props.user ) {
       admin  = this.props.user.role === 3;
     };
+
     const tabAdmin = admin ? <Tab icon={<Kitchen />} label="Admin" /> : null
     return <div>
         <AppBar position="static" className={classes.FooterContainer}>
-          <Tabs className={classes.TabItem} value={this.props.selectedTab} onChange={this.handleChange} scrollable scrollButtons="off">
+          <Tabs className={classes.TabItem} value={Number(tabValue)} onChange={this.tabChangeHandler} scrollable scrollButtons="off">
             <Tab icon={<Home />} label="Home" />
             <Tab icon={<SupervisorAccount />} label="About us" />
             <Tab icon={<PermPhoneMsg />} label="Contact us" />
@@ -55,15 +64,9 @@ class Footer extends Component {
   }
 }
 const mapStateToProps = state => {
-  //console.log(state)
   return {
-    user: state.auth.user,
-    selectedTab: state.auth.selectedTab
+    user: state.auth.user
   }
 }
-const mapDispatchToProps = dispatch => {
-  return {
-    onTabChange: tabIndex => dispatch(actions.authTabChange(tabIndex))
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps) (withRouter(Footer));
+
+export default connect(mapStateToProps) (withRouter(Footer));

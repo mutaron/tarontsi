@@ -11,15 +11,16 @@
     margin-left: 10px;
     border: 2px dashed #00f;
 }
-.container{
-  padding: 10px;
+.control{
+  width: 150px;
+  text-align: left;
 }
 .MenuText{
   padding: 3px;
 }
 
 .NavigationItem a {
-    color: #8F5C2C;
+    color: rgb(169, 196, 35);
     text-decoration: none;
     width: 100%;
     box-sizing: border-box;
@@ -29,5 +30,25 @@
 .NavigationItem a:hover,
 .NavigationItem a:active,
 .NavigationItem a.active {
-    color: #40A4C8;
+    color: rgb(16, 79, 215);
+}
+.Card{
+  text-align:center;
+  width: 100%;
+}
+
+.MainContainer{
+    display: inline-flex;
+    vertical-align:center;
+    margin-top: 50px;
+    width: 100%;
+}
+.error{
+  color: tomato;
+}
+.success{
+  color: rgb(65, 138, 12);
+}
+.FormControl{
+  margin-left: 10px;
 }

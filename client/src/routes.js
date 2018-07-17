@@ -10,7 +10,8 @@ import Layout from './hoc/Layout/Layout';
 import Profile from "./components/Auth/Profile";
 import authCheck from "./hoc/Auth";
 import AdminHome from './components/User/Admin/AdminHome';
-import DailyLedger from './components/User/Admin/DailyLedger'; 
+import DailyLedger from "./components/User/Admin/DailyLedger"; 
+import LedgerReport from './components/User/Admin/LedgerReport'; 
 
 export default Rountes => (
   <Layout>
@@ -20,6 +21,7 @@ export default Rountes => (
       <Route path="/profile" exact component={authCheck(Profile, "0")} />
       <Route path="/contactus" exact component={authCheck(ContactUs, "0")} />
       <Route path="/admin/ledger" exact component={authCheck(DailyLedger, "3")} />
+      <Route path="/admin/ledger_report" exact component={authCheck(LedgerReport, "3")} />
       <Route path="/aboutus" exact component={authCheck(AboutUs, "0")} />
       <Route path="/admin/home" exact component={authCheck(AdminHome, "3")} />
       <Route path="/" component={authCheck(Home, "0")} />
